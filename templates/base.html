@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Easy Drive</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+        }
+        header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h3>Logged in as: {{ request.user }}</h3>
+        <a href="{% url 'homepage' %}">Home</a>
+        <a href="{% url 'show_blogs' %}">Blogs</a>
+        <h2>Easy Drive</h2>
+        {% if request.user.is_anonymous %}
+            <a href="{% url 'register_user' %}">Register</a>
+            <a href="{% url 'login_user' %}">Login</a>
+        {% else %}
+            <a href="{% url 'details_profile' request.user.pk %}">View profile</a>
+            <a href="{% url 'logout_user' %}">Logout</a>
+        {% endif %}
+    </header>
+    <main>
+        {% block page_content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <div>
+            Contact us: +359 8790 4770
+            Email us at: easydrive.support@gmail.com
+        </div>
+    </footer>
+</body>
+</html>

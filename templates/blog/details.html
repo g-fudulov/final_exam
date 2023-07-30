@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <h1>Blog Details</h1>
+    <div class="wrapper">
+        <p>{{ object.title }}</p>
+        <p>{{ object.topic }}</p>
+        <p>{{ object.content }}</p>
+        <p>Published: {{ object.published }}</p>
+        <a href="{% url 'details_profile' author_profile.pk %}">Published by: {{ author_user }}</a>
+        <button>
+            {% if request.user.pk is author_user.pk %}
+                <a href="{% url 'edit_blog' object.pk %}">Edit Blog</a>
+            {% else %}
+                <a href="#">Contact Author</a>
+            {% endif %}
+        </button>
+        {% if request.user.pk is author_user.pk %}
+            <button>
+                <a href="{% url 'delete_blog' object.pk %}">Delete Blog</a>
+            </button>
+        {% endif %}
+        {% if not request.user.is_anonymous %}
+            {% if like_instance.owner.pk is request.user.pk %}
+                <button>
+                    <a href="{% url "like_remove" object.pk %}">Remove Like</a>
+                </button>
+            {% else %}
+                <button>
+                    <a href="{% url "like_create" object.pk %}">Like</a>
+                </button>
+            {% endif %}
+        {% endif %}
+        <p>Liked by {{ all_likes }} users</p>
+    </div>
+{% endblock %}

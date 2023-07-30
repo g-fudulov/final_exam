@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <h1>Delete Profile</h1>
+    <p style="color: lightcoral">All related advertisements will be deleted. You will no longer have access to them!</p>
+    <form method="post" action="{% url 'delete_user' object.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit">Delete Profile</button>
+    </form>
+{% endblock %}

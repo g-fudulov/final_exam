@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <h1>Advertisement Details</h1>
+    <div class="wrapper">
+        <p>{{ object.title }}</p>
+        <img src="{{ object.cover_photo }}" alt="{{ object.title }} 1">
+        <img src="{{ object.additional_photo }}" alt="{{ object.title }} 2">
+        <p>{{ object.description }}</p>
+        <p>Published: {{ object.published }}</p>
+        <a href="{% url 'details_profile' author_profile.pk %}">Published by: {{ author_user }}</a>
+        <button>
+            {% if request.user.pk is author_user.pk %}
+                <a href="{% url 'edit_ad' object.pk %}">Edit Advertisement</a>
+            {% else %}
+                <a href="#">Contact Owner</a>
+            {% endif %}
+        </button>
+        {% if request.user.pk is author_user.pk %}
+            <button>
+                <a href="{% url 'delete_ad' object.pk %}">Delete Advertisement</a>
+            </button>
+        {% endif %}
+        <p>Comments:</p>
+        {% if not request.user.is_anonymous %}
+            <form method="post" action="{% url 'create_comment' ad.pk %}">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+                <button type="submit">
+                    Post comment
+                </button>
+        {% endif %}
+        {% for comment in ad.comment_set.all %}
+            <p><a href="{% url 'details_profile' comment.owner.pk %}">{{ comment.owner.user }}</a> says:</p>
+            <p>{{ comment.content }}</p>
+            <p style="color: gray">{{ comment.published }}</p>
+            {% if comment.owner.user.pk is request.user.pk %}
+                <button>
+                    <a href="{% url 'edit_comment' comment.pk %}">Edit Comment</a>
+                </button>
+                <button>
+                    <a href="{% url 'delete_comment' comment.pk %}">Delete Comment</a>
+                </button>
+            {% endif %}
+        {% empty %}
+            <p>This post does not have any comments!</p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block page_content %}
+    <h1>Edit Advertisement</h1>
+    <form method="post" action="{% url 'edit_ad' object.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit">Edit Advertisement</button>
+    </form>
+{% endblock %}
