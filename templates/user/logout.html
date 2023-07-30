@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block page_content %}
+<h1>Logout</h1>
+    <form method="post" action="{% url 'logout_user' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit">Logout</button>
+    </form>
+{% endblock %}

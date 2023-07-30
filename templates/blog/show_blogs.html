@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block page_content %}
+<h1>
+    Blogs
+</h1>
+    <h3>
+        <a href="{% url 'create_blog' %}">Post in Blogs</a>
+    </h3>
+    {% for blog in object_list %}
+        <div class="card">
+            <p>{{ blog.title }}</p>
+            <p>{{ blog.topic }}</p>
+            <button>
+                <a href="{% url 'details_blog' blog.pk %}">See More</a>
+            </button>
+        </div>
+    {% empty %}
+        <p>No Posts Yet!</p>
+    {% endfor %}
+{% endblock %}
