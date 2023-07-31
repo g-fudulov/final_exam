@@ -7,41 +7,50 @@
     <h3>
         <a href="{% url 'create_ad' %}">Create Advertisement</a>
     </h3>
+    <div class="container">
 
-    {% for ad in object_list %}
-        <div class="card">
-            <p>{{ ad.title }}</p>
-            <img class="cover img" src="{{ ad.cover_photo }}" alt="{{ ad.title }}">
-            <button>
-                <a href="{% url 'details_ad' ad.pk %}">See More</a>
-            </button>
-            <div>Comments:</div>
-            {% if not request.user.is_anonymous %}
-            <form method="post" action="{% url 'create_comment' ad.pk %}">
-                {% csrf_token %}
-                {{ comment_form.as_p }}
-                    <button type="submit">
-                        Post comment
-                    </button>
-            {% endif %}
-            </form>
-            {% for comment in ad.comment_set.all %}
-                <p><a href="{% url 'details_profile' comment.owner.pk %}">{{ comment.owner.user }}</a> says:</p>
-                <p>{{ comment.content }}</p>
-                <p style="color: gray">{{ comment.published }}</p>
-                {% if comment.owner.user.pk is request.user.pk %}
-                    <button>
-                        <a href="{% url 'edit_comment' comment.pk %}">Edit Comment</a>
-                    </button>
-                    <button>
-                        <a href="{% url 'delete_comment' comment.pk %}">Delete Comment</a>
-                    </button>
-                {% endif %}
+            {% for ad in object_list %}
+                <div class="row">
+                        <div class="col-sm-4">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="{{ ad.cover_photo }}" alt="{{ ad.title }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ ad.title }}</h5>
+                                    <p class="card-text">{{ ad.description }}</p>
+                                        <a class="btn btn-primary" href="{% url 'details_ad' ad.pk %}">See More</a>
+
+                                    <div>Comments:</div>
+                                    {% if not request.user.is_anonymous %}
+                                    <form method="post" action="{% url 'create_comment' ad.pk %}">
+                                        {% csrf_token %}
+                                        {{ comment_form.as_p }}
+                                            <button type="submit">
+                                                Post comment
+                                            </button>
+                                    {% endif %}
+                                    </form>
+                                    {% for comment in ad.comment_set.all %}
+                                        <p><a href="{% url 'details_profile' comment.owner.pk %}">{{ comment.owner.user }}</a> says:</p>
+                                        <p>{{ comment.content }}</p>
+                                        <p style="color: gray">{{ comment.published }}</p>
+                                        {% if comment.owner.user.pk is request.user.pk %}
+                                            <button>
+                                                <a href="{% url 'edit_comment' comment.pk %}">Edit Comment</a>
+                                            </button>
+                                            <button>
+                                                <a href="{% url 'delete_comment' comment.pk %}">Delete Comment</a>
+                                            </button>
+                                        {% endif %}
+                                    {% empty %}
+                                        <p>This post does not have any comments!</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                </div>
             {% empty %}
-                <p>This post does not have any comments!</p>
+                <p>No Post Yet!</p>
             {% endfor %}
-        </div>
-    {% empty %}
-        <p>No Post Yet!</p>
-    {% endfor %}
+    </div>
+    <br>
 {% endblock %}

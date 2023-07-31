@@ -137,6 +137,10 @@ LOGIN_URL = reverse_lazy('login_user')
 LOGIN_REDIRECT_URL = reverse_lazy('homepage')
 AUTH_USER_MODEL = 'easy_drive.MyUser'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

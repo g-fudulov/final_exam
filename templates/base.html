@@ -1,26 +1,19 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Easy Drive</title>
-    <style>
-        *{
-            box-sizing: border-box;
-            margin: 0;
-        }
-        header{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-    </style>
+    <link href="{% static 'css/reset.css' %}">
+    <link href="{% static "css/general.css" %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
 <body>
-    <header>
-        <h3>Logged in as: {{ request.user }}</h3>
+    <header class="jumbotron text-center">
+        <h1>Easy Drive</h1>
+        <h4>Logged in as: {{ request.user }}</h4>
         <a href="{% url 'homepage' %}">Home</a>
         <a href="{% url 'show_blogs' %}">Blogs</a>
-        <h2>Easy Drive</h2>
         {% if request.user.is_anonymous %}
             <a href="{% url 'register_user' %}">Register</a>
             <a href="{% url 'login_user' %}">Login</a>
@@ -39,5 +32,32 @@
             Email us at: easydrive.support@gmail.com
         </div>
     </footer>
+
+
+{#<div class="jumbotron text-center">#}
+{#  <h1>My First Bootstrap Page</h1>#}
+{#  <p>Resize this responsive page to see the effect!</p>#}
+{#</div>#}
+{##}
+{#<div class="container">#}
+{#  <div class="row">#}
+{#    <div class="col-sm-4">#}
+{#      <h3>Column 1</h3>#}
+{#      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>#}
+{#      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>#}
+{#    </div>#}
+{#    <div class="col-sm-4">#}
+{#      <h3>Column 2</h3>#}
+{#      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>#}
+{#      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>#}
+{#    </div>#}
+{#    <div class="col-sm-4">#}
+{#      <h3>Column 3</h3>#}
+{#      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>#}
+{#      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>#}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+
 </body>
 </html>
