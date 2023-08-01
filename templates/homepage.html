@@ -1,18 +1,17 @@
 {% extends 'base.html' %}
 {% block page_content %}
-<h1>
+<h2 class="my hello">
     Hello {{ request.user }}
-</h1>
+</h2>
 
-    <h3>
-        <a href="{% url 'create_ad' %}">Create Advertisement</a>
-    </h3>
-    <div class="container">
+    <h4>
+        <a href="{% url 'create_ad' %}" class="my link">Create Advertisement</a>
+    </h4>
+    <div class="my custom-container">
 
             {% for ad in object_list %}
-                <div class="row">
-                        <div class="col-sm-4">
-                            <div class="card" style="width: 18rem;">
+
+                            <div class="my custom card" style="width: 18rem;">
                                 <img class="card-img-top" src="{{ ad.cover_photo }}" alt="{{ ad.title }}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ ad.title }}</h5>
@@ -23,31 +22,32 @@
                                     {% if not request.user.is_anonymous %}
                                     <form method="post" action="{% url 'create_comment' ad.pk %}">
                                         {% csrf_token %}
-                                        {{ comment_form.as_p }}
-                                            <button type="submit">
-                                                Post comment
-                                            </button>
+                                        <div class="input-group input-group-sm mb-3">
+{#                                        {{ comment_form.as_p }} TODO: Add class to form#}
+                                            {{ comment_form.as_p }}
+                                            <div class="input-group-append">
+                                                <button type="submit" class="input-group-text" id="inputGroup-sizing-sm">
+                                                    Post comment
+                                                </button>
+                                            </div>
+                                        </div>
                                     {% endif %}
                                     </form>
                                     {% for comment in ad.comment_set.all %}
-                                        <p><a href="{% url 'details_profile' comment.owner.pk %}">{{ comment.owner.user }}</a> says:</p>
+                                        <p><a href="{% url 'details_profile' comment.owner.pk %}" class="my link username">{{ comment.owner.user }}</a> says:</p>
                                         <p>{{ comment.content }}</p>
-                                        <p style="color: gray">{{ comment.published }}</p>
+                                        <p style="color: #c6d9ec">{{ comment.published }}</p>
                                         {% if comment.owner.user.pk is request.user.pk %}
-                                            <button>
-                                                <a href="{% url 'edit_comment' comment.pk %}">Edit Comment</a>
-                                            </button>
-                                            <button>
-                                                <a href="{% url 'delete_comment' comment.pk %}">Delete Comment</a>
-                                            </button>
+                                            <div class="my comment-btns-wrapper">
+                                                <a href="{% url 'edit_comment' comment.pk %}" class="comment-btn btn btn-primary">Edit Comment</a>
+                                                <a href="{% url 'delete_comment' comment.pk %}" class="comment-btn  btn btn-primary">Delete Comment</a>
+                                            </div>
                                         {% endif %}
                                     {% empty %}
                                         <p>This post does not have any comments!</p>
                                     {% endfor %}
                                 </div>
                             </div>
-                        </div>
-                </div>
             {% empty %}
                 <p>No Post Yet!</p>
             {% endfor %}

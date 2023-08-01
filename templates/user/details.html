@@ -12,6 +12,11 @@
     {% else %}
         <p>Last Name: no information</p>
     {% endif %}
+    {% if object.phone_number %}
+        <p>Phone Number: {{ object.phone_number }}</p>
+    {% else %}
+        <p>Phone Number: no information</p>
+    {% endif %}
     {% if object.user_id is request.user.pk %}
         <button>
             <a href="{% url 'edit_profile' object.pk %}">Edit Profile</a>

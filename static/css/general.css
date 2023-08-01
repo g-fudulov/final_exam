@@ -1,7 +1,86 @@
-div.custom{
+div.my.custom-container{
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        justify-content: space-around;
+        flex-wrap: wrap;
         flex-direction: row;
-        background: aquamarine;
+        gap: 26px 56px;
+}
+
+div.my.custom{
+        width: 700px;
+        margin: 8px;
+        background: #7575a3;
+}
+
+h1.my.custom-headline#headline{
+        color: #0073e6;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 600;
+}
+
+.my.logged-p{
+        /*color: #004080;*/
+        color: #c2e7ff;
+}
+
+.my.link.in-header{
+        color: #0282ac;
+        margin-left: 6px;
+        margin-right: 6px;
+}
+
+
+.my.link:hover{
+        color: ghostwhite;
+}
+
+
+.my.link{
+        text-decoration: none;
+        font-family: 'Roboto', sans-serif;
+        color: #0d6efd;
+        transition: 0.3s ease;
+}
+
+.my.link.username{
+       color: black;
+        font-size: 18px;
+        transition: 0.35s ease;
+}
+
+.my.link.username:hover{
+        color: ghostwhite;
+}
+
+body{
+        background: #1c1326;
+}
+
+.my.hello{
+        color: #c2e7ff;
+}
+
+footer.my.footer{
+        background: #1c1c1c;
+        color: #c2e7ff;
+        padding-top: 20px;
+        padding-bottom: 12px;
+}
+
+div.my.footer-wrapper{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+}
+
+.comment-btn{
+        margin: 2px 4px -4px 4px;
+        padding: 0 2px 0 2px;
+}
+
+div.my.comment-btns-wrapper{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0 4px;
 }

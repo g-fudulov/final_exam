@@ -6,7 +6,7 @@
     <h3>
         <a href="{% url 'create_blog' %}">Post in Blogs</a>
     </h3>
-    <div class="custom">
+    <div class="my custom-container" id="show_blogs-container">
         {% for blog in object_list %}
 
         <div class="card" style="width: 24rem;">
@@ -15,11 +15,8 @@
             <p>Posted: {{ blog.published }}</p>
                 <a class="btn btn-primary card-link" href="{% url 'details_blog' blog.pk %}">See More</a>
         </div>
-    </div>
-
-
-
         {% empty %}
             <p>No Posts Yet!</p>
         {% endfor %}
+    </div>
 {% endblock %}
