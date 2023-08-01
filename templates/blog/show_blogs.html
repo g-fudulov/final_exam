@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
 {% block page_content %}
-<h1>
+<h1 class="my hello">
     Blogs
 </h1>
-    <h3>
-        <a href="{% url 'create_blog' %}">Post in Blogs</a>
+    <h3 style="margin-left: 20px">
+        <a href="{% url 'create_blog' %}" class="my link">Post in Blogs</a>
     </h3>
     <div class="my custom-container" id="show_blogs-container">
         {% for blog in object_list %}
 
-        <div class="card" style="width: 24rem;">
-            <h5 class="card-title">Title: {{ blog.title }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Topic: {{ blog.topic }}</h6>
-            <p>Posted: {{ blog.published }}</p>
-                <a class="btn btn-primary card-link" href="{% url 'details_blog' blog.pk %}">See More</a>
+        <div class="my custom card" style="width: 24rem;">
+            <h5 class="card-title" style="font-size: 24px; margin-left: auto; margin-top: 6px; margin-right: auto;">Title: {{ blog.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted" style="font-size: 20px; margin-left: 8px;">Topic: {{ blog.topic }}</h6>
+            <p style="font-size: 15px; margin-left: 4px;">Posted: {{ blog.published }} By:
+                <a class="my link username" href="{% url 'details_profile' blog.owner_id %}">{{ blog.owner.user }}</a></p>
+                <a id="details-btn" class="btn btn-primary card-link" href="{% url 'details_blog' blog.pk %}">See More</a>
         </div>
         {% empty %}
             <p>No Posts Yet!</p>

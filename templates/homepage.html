@@ -4,9 +4,12 @@
     Hello {{ request.user }}
 </h2>
 
-    <h4>
+    <h4 style="margin-left: 20px">
         <a href="{% url 'create_ad' %}" class="my link">Create Advertisement</a>
     </h4>
+    <div style="display: flex; justify-content: center; align-items: center; margin: 16px 0 16px 0">
+        <p style="font-size: 38px; color: #c2e7ff">Online Advertisements</p>
+    </div>
     <div class="my custom-container">
 
             {% for ad in object_list %}
@@ -15,15 +18,12 @@
                                 <img class="card-img-top" src="{{ ad.cover_photo }}" alt="{{ ad.title }}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ ad.title }}</h5>
-                                    <p class="card-text">{{ ad.description }}</p>
+                                    <p class="card-text" style="font-size: 18px">Description: {{ ad.description }}</p>
                                         <a class="btn btn-primary" href="{% url 'details_ad' ad.pk %}">See More</a>
-
-                                    <div>Comments:</div>
                                     {% if not request.user.is_anonymous %}
                                     <form method="post" action="{% url 'create_comment' ad.pk %}">
                                         {% csrf_token %}
                                         <div class="input-group input-group-sm mb-3">
-{#                                        {{ comment_form.as_p }} TODO: Add class to form#}
                                             {{ comment_form.as_p }}
                                             <div class="input-group-append">
                                                 <button type="submit" class="input-group-text" id="inputGroup-sizing-sm">
@@ -33,6 +33,8 @@
                                         </div>
                                     {% endif %}
                                     </form>
+                                <div class="my comment-section">
+                                    <p style="color: ghostwhite">Comments:</p>
                                     {% for comment in ad.comment_set.all %}
                                         <p><a href="{% url 'details_profile' comment.owner.pk %}" class="my link username">{{ comment.owner.user }}</a> says:</p>
                                         <p>{{ comment.content }}</p>
@@ -46,6 +48,7 @@
                                     {% empty %}
                                         <p>This post does not have any comments!</p>
                                     {% endfor %}
+                                </div>
                                 </div>
                             </div>
             {% empty %}

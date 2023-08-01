@@ -7,19 +7,11 @@ div.my.custom-container{
 }
 
 div.my.custom{
-        width: 700px;
         margin: 8px;
         background: #7575a3;
 }
 
-h1.my.custom-headline#headline{
-        color: #0073e6;
-        font-family: 'Roboto', sans-serif;
-        font-weight: 600;
-}
-
 .my.logged-p{
-        /*color: #004080;*/
         color: #c2e7ff;
 }
 
@@ -27,6 +19,7 @@ h1.my.custom-headline#headline{
         color: #0282ac;
         margin-left: 6px;
         margin-right: 6px;
+
 }
 
 
@@ -54,17 +47,26 @@ h1.my.custom-headline#headline{
 
 body{
         background: #1c1326;
+        font-family: 'Roboto', sans-serif;
+        font-size: 20px;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+}
+
+main {
+        flex: 1;
+}
+
+footer {
+        flex-shrink: 0;
 }
 
 .my.hello{
         color: #c2e7ff;
-}
-
-footer.my.footer{
-        background: #1c1c1c;
-        color: #c2e7ff;
-        padding-top: 20px;
-        padding-bottom: 12px;
+        margin-left: 20px;
+        margin-bottom: 6px;
 }
 
 div.my.footer-wrapper{
@@ -83,4 +85,29 @@ div.my.comment-btns-wrapper{
         align-items: center;
         justify-content: center;
         gap: 0 4px;
+}
+
+div.my.image-wrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 125px;
+}
+div.my.image-wrapper img{
+        height: 100%;
+        width: auto;
+}
+
+div .my.comment-section{
+        border-top: 0.5px solid black;
+
+}
+
+#comment-input{
+        margin-bottom: 4px;
+        margin-top: 10px;
+}
+
+div.input-group label{
+        display: none;
 }
