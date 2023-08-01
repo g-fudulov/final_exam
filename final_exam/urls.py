@@ -21,4 +21,3 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('final_exam.easy_drive.urls'))
 ]
-
