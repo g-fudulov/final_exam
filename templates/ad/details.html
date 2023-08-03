@@ -1,48 +1,63 @@
 {% extends 'base.html' %}
 {% block page_content %}
-    <h1>Advertisement Details</h1>
-    <div class="wrapper">
-        <p>{{ object.title }}</p>
-        <img src="{{ object.cover_photo }}" alt="{{ object.title }} 1">
-        <img src="{{ object.additional_photo }}" alt="{{ object.title }} 2">
+    <div class="my ad-heading">
+    <h1 class="my ad-details">Advertisement Details</h1>
+    <p style="color: #c2e7ff; font-size: 30px; margin-top: 8px;">{{ object.title }}</p>
+    </div>
+
+    <div class="my wrapper details">
+        <div class="my img wrapper">
+            <div class="my img-wrapper">
+                <img src="{{ object.cover_photo }}" alt="{{ object.title }} 1">
+            </div>
+            <div class="my img-wrapper">
+                <img src="{{ object.additional_photo }}" alt="{{ object.title }} 2">
+            </div>
+        </div>
         <p>{{ object.description }}</p>
-        <p>Published: {{ object.published }}</p>
-        <a href="{% url 'details_profile' author_profile.pk %}">Published by: {{ author_user }}</a>
-        <button>
+        <p>Published by: <a href="{% url 'details_profile' author_profile.pk %}" class="my link username">{{ author_user }}</a></p>
             {% if request.user.pk is author_user.pk %}
-                <a href="{% url 'edit_ad' object.pk %}">Edit Advertisement</a>
+                <a href="{% url 'edit_ad' object.pk %}" class="my details btn btn-primary">Edit Advertisement</a>
             {% else %}
-                <a href="#">Contact Owner</a>
+                {% if author_profile.phone_number %}
+                    <p>Owner's phone number: {{ author_profile.phone_number }}</p>
+                {% else %}
+                    <p>Owner's phone number: no information</p>
+                {% endif %}
             {% endif %}
-        </button>
         {% if request.user.pk is author_user.pk %}
-            <button>
-                <a href="{% url 'delete_ad' object.pk %}">Delete Advertisement</a>
-            </button>
+                <a href="{% url 'delete_ad' object.pk %}" class="my details btn btn-primary">Delete Advertisement</a>
         {% endif %}
-        <p>Comments:</p>
+    <p style="color: #c6d9ec; font-size: 16px; margin-top: 4px">Published: {{ object.published }}</p>
+
         {% if not request.user.is_anonymous %}
             <form method="post" action="{% url 'create_comment' ad.pk %}">
             {% csrf_token %}
+            <div class="input-group input-group-sm mb-3">
             {{ comment_form.as_p }}
-                <button type="submit">
-                    Post comment
-                </button>
+                <div class="input-group-append">
+                    <button type="submit" class="input-group-text" id="inputGroup-sizing-sm">
+                        Post comment
+                    </button>
+                </div>
+            </div>
+            </form>
         {% endif %}
-        {% for comment in ad.comment_set.all %}
-            <p><a href="{% url 'details_profile' comment.owner.pk %}">{{ comment.owner.user }}</a> says:</p>
-            <p>{{ comment.content }}</p>
-            <p style="color: gray">{{ comment.published }}</p>
-            {% if comment.owner.user.pk is request.user.pk %}
-                <button>
-                    <a href="{% url 'edit_comment' comment.pk %}">Edit Comment</a>
-                </button>
-                <button>
-                    <a href="{% url 'delete_comment' comment.pk %}">Delete Comment</a>
-                </button>
-            {% endif %}
-        {% empty %}
-            <p>This post does not have any comments!</p>
-        {% endfor %}
+        <div style="border-top: 1px solid black">
+            <p style="color: ghostwhite; font-size: 24px; margin-top: 12px;">Comments:</p>
+            {% for comment in ad.comment_set.all %}
+                    <p><a href="{% url 'details_profile' comment.owner.pk %}" class="my link username" style="font-size: 22px">{{ comment.owner.user }}</a> says:</p>
+                    <p style="color: #212529">{{ comment.content }}</p>
+                    <p style="color: #c6d9ec; font-size: 16px;">{{ comment.published }}</p>
+                {% if comment.owner.user.pk is request.user.pk %}
+                    <div style="margin-bottom: -6px">
+                        <a href="{% url 'edit_comment' comment.pk %}" class="comment-btn btn btn-primary" style="margin-bottom: 8px">Edit Comment</a>
+                        <a href="{% url 'delete_comment' comment.pk %}" class="comment-btn btn btn-primary" style="margin-bottom: 8px">Delete Comment</a>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <p>This post does not have any comments!</p>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
