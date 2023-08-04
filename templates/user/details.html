@@ -1,57 +1,78 @@
 {% extends 'base.html' %}
 {% block page_content %}
-    <h1>{{ ad_owner_user }}'s profile</h1>
-    <p>Created: {{ object.created_on }}</p>
-    {% if object.first_name %}
-        <p>Fist Name: {{ object.first_name }}</p>
-    {% else %}
-        <p>First Name: no information</p>
-    {% endif %}
-    {% if object.last_name %}
-        <p>Last Name: {{ object.last_name }}</p>
-    {% else %}
-        <p>Last Name: no information</p>
-    {% endif %}
-    {% if object.phone_number %}
-        <p>Phone Number: {{ object.phone_number }}</p>
-    {% else %}
-        <p>Phone Number: no information</p>
-    {% endif %}
-    {% if object.user_id is request.user.pk %}
-        <button>
-            <a href="{% url 'edit_profile' object.pk %}">Edit Profile</a>
-        </button>
-        <button>
-            <a href="{% url 'edit_username' ad_owner_user.pk %}">Edit Username</a>
-        </button>
-        <button>
-            <a href="{% url 'delete_user' ad_owner_user.pk %}">Delete Profile</a>
-        </button>
-    {% endif %}
-    <h2>Posted Advertisements:</h2>
-    {% for ad in all_ads %}
-
-        <p>Advertisement Details</p>
-        <div class="wrapper">
-            <p>{{ ad.title }}</p>
-            <img src="{{ ad.cover_photo }}" alt="{{ ad.title }} 1">
-            <button>
-                <a href="{% url 'details_ad' ad.pk %}">See More</a>
-            </button>
+    <div class="my wrapper" id="details-wrapper">
+        <div class="my top-section">
+                <h1 style="color:ghostwhite;">{{ ad_owner_user }}'s profile</h1>
+            <div class="my info-section">
+                <p class="my info" style="color: #c6d9ec">Created: {{ object.created_on }}</p>
+                {% if object.first_name %}
+                    <p class="my info">Fist Name: {{ object.first_name }}</p>
+                {% else %}
+                    <p class="my info">First Name: no information</p>
+                {% endif %}
+                {% if object.last_name %}
+                    <p class="my info">Last Name: {{ object.last_name }}</p>
+                {% else %}
+                    <p class="my info">Last Name: no information</p>
+                {% endif %}
+                {% if object.phone_number %}
+                    <p class="my info">Phone Number: {{ object.phone_number }}</p>
+                {% else %}
+                    <p class="my info">Phone Number: no information</p>
+                {% endif %}
+            </div>
+            <div class="my btn-section">
+                {% if object.user_id is request.user.pk %}
+                    <a href="{% url 'edit_profile' object.pk %}" class="btn btn-primary">Edit Profile</a>
+                    <a href="{% url 'edit_username' ad_owner_user.pk %}" class="btn btn-primary">Edit Username</a>
+                    <a href="{% url 'delete_user' ad_owner_user.pk %}" class="btn btn-primary">Delete Profile</a>
+                {% endif %}
+            </div>
         </div>
-    {% empty %}
-        <p>This user does not have any posts!</p>
-    {% endfor %}
-    <h2>Posts in Blogs:</h2>
-    {% for blog in all_blogs %}
-        <div class="card">
-            <p>{{ blog.title }}</p>
-            <p>{{ blog.topic }}</p>
-            <button>
-                <a href="{% url 'details_blog' blog.pk %}">See More</a>
-            </button>
+    <h2 style="color: ghostwhite; margin-left: auto; margin-right: auto;">Posted Advertisements:</h2>
+    <div class="my  profile custom-container" style="margin-top: 16px">
+            {% for ad in all_ads %}
+                <div class="my custom card" style="width: 18rem;">
+                    <img class="card-img-top" src="{{ ad.cover_photo }}" alt="{{ ad.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ ad.title }}</h5>
+                        <p class="card-text" style="font-size: 18px">Description: {{ ad.description }}</p>
+                        <a class="btn btn-primary" style="margin-bottom: 4px; margin-top: 6px;" href="{% url 'details_ad' ad.pk %}">See More</a>
+                    <div class="my comment-section">
+                        <p style="color: ghostwhite">Comments:</p>
+                        {% for comment in ad.comment_set.all %}
+                            <p><a href="{% url 'details_profile' comment.owner.pk %}" class="my link username">{{ comment.owner.user }}</a> says:</p>
+                            <p>{{ comment.content }}</p>
+                            <p style="color: #c6d9ec">{{ comment.published }}</p>
+                            {% if comment.owner.user.pk is request.user.pk %}
+                                <div class="my comment-btns-wrapper">
+                                    <a href="{% url 'edit_comment' comment.pk %}" class="comment-btn btn btn-primary">Edit Comment</a>
+                                    <a href="{% url 'delete_comment' comment.pk %}" class="comment-btn  btn btn-primary">Delete Comment</a>
+                                </div>
+                            {% endif %}
+                        {% empty %}
+                            <p>This post does not have any comments!</p>
+                        {% endfor %}
+                    </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color:#c2e7ff;">This user does not have any posts!</p>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>This user does not have any posts in Blogs!</p>
-    {% endfor %}
+        <h2 style="color: ghostwhite; margin-left: auto; margin-right: auto;">Posts in Blogs:</h2>
+        <div class="my custom-container" id="show_blogs-container">
+            {% for blog in all_blogs %}
+                <div class="my custom card" style="width: 24rem;">
+                    <h5 class="card-title" style="font-size: 24px; margin-left: auto; margin-top: 6px; margin-right: auto;">Title: {{ blog.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" style="font-size: 20px; margin-left: 8px;">Topic: {{ blog.topic }}</h6>
+                    <p style="font-size: 15px; margin-left: 4px;">Posted: {{ blog.published }} By:
+                        <a class="my link username" href="{% url 'details_profile' blog.owner_id %}">{{ blog.owner.user }}</a></p>
+                        <a id="details-btn" class="btn btn-primary card-link" href="{% url 'details_blog' blog.pk %}">See More</a>
+                </div>
+            {% empty %}
+                <p style="color: #c2e7ff";>This user does not have any posts in Blogs!</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

@@ -179,3 +179,38 @@ div.my.wrapper.details{
 a.my.details.btn{
         margin-top: 6px;
 }
+
+#details-wrapper{
+        flex-direction: column;
+        gap: 32px;
+}
+
+p.my.info{
+        color: ghostwhite;
+}
+
+div.my.top-section{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 14px;
+        margin-bottom: 20px;
+}
+
+div.my.info-section{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 4px;
+}
+
+div.my.btn-section{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 6px;
+}
