@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 {% block page_content %}
-    <h1>Delete Profile</h1>
-    <p style="color: lightcoral">All related advertisements will be deleted. You will no longer have access to them!</p>
-    <form method="post" action="{% url 'delete_user' object.pk %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="hidden" name="next" value="{{ next }}">
-        <button type="submit">Delete Profile</button>
-    </form>
+    <div class="my form wrapper">
+        <h1 style="color: ghostwhite;">Delete Profile</h1>
+        <p style="color: crimson;">All related advertisements will be deleted. You will no longer have access to them!</p>
+        <form method="post" action="{% url 'delete_user' object.pk %}">
+            {% csrf_token %}
+             <div class="my elements-form wrapper">
+                {{ form.as_p }}
+            </div>
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="my elements-form wrapper">
+                <button type="submit" class="btn btn-primary" style="margin-top: 12px">Delete Profile</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

@@ -17,6 +17,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ ad.title }}</h5>
                                     <p class="card-text" style="font-size: 18px">Description: {{ ad.description }}</p>
+                                    <p class="card-text" style="font-size: 18px">Price: {{ ad.price }}</p>
                                     <a class="btn btn-primary" style="margin-bottom: 4px; margin-top: 6px;" href="{% url 'details_ad' ad.pk %}">See More</a>
                                     {% if not request.user.is_anonymous %}
                                     <form method="post" action="{% url 'create_comment' ad.pk %}">

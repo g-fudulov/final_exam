@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
 {% block page_content %}
-    <h1>Delete Blog</h1>
-    <form method="post" action="{% url 'delete_blog' object.pk %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="hidden" name="next" value="{{ next }}">
-        <button type="submit">Confirm Deletion</button>
-    </form>
+    <div class="my form wrapper">
+        <h1 style="color: ghostwhite;">Delete Blog</h1>
+        <p style="color: crimson;">Your Blog will be permanently deleted!</p>
+        <form method="post" action="{% url 'delete_blog' object.pk %}">
+            {% csrf_token %}
+            <div class="my elements-form wrapper">
+                {{ form.as_p }}
+            </div>
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="my elements-form wrapper">
+                <button type="submit" class="btn btn-primary" style="margin-top: 12px">Confirm</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

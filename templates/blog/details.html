@@ -1,35 +1,29 @@
 {% extends 'base.html' %}
 {% block page_content %}
-    <h1>Blog Details</h1>
-    <div class="wrapper">
-        <p>{{ object.title }}</p>
-        <p>{{ object.topic }}</p>
-        <p>{{ object.content }}</p>
-        <p>Published: {{ object.published }}</p>
-        <a href="{% url 'details_profile' author_profile.pk %}">Published by: {{ author_user }}</a>
-        <button>
+    <div class="my wrapper" style="align-items: center; justify-content: center; margin-top: 18px; margin-bottom: 18px;">
+    <h1 style="color: ghostwhite;">Blog Details</h1>
+    </div>
+    <div class="my wrapper blog-details">
+        <h2 style="color: #c2e7ff;">Title: {{ object.title }}</h2>
+        <p style="font-size: 24px;">Topic: {{ object.topic }}</p>
+        <p style="font-size: 22px;">Content: {{ object.content }}</p>
+        <p style="font-size: 20px;">Author: <a style="font-size: 22px;" href="{% url 'details_profile' author_profile.pk %}" class="my link username">{{ author_user }}</a></p>
+        <p style="color: #c6d9ec; font-size: 16px;">Published: {{ object.published }}</p>
+        <div class="my blog-details btns">
             {% if request.user.pk is author_user.pk %}
-                <a href="{% url 'edit_blog' object.pk %}">Edit Blog</a>
-            {% else %}
-                <a href="#">Contact Author</a>
+                <a href="{% url 'edit_blog' object.pk %}" class="btn btn-primary">Edit Blog</a>
             {% endif %}
-        </button>
-        {% if request.user.pk is author_user.pk %}
-            <button>
-                <a href="{% url 'delete_blog' object.pk %}">Delete Blog</a>
-            </button>
-        {% endif %}
-        {% if not request.user.is_anonymous %}
-            {% if like_instance.owner.pk is request.user.pk %}
-                <button>
-                    <a href="{% url "like_remove" object.pk %}">Remove Like</a>
-                </button>
-            {% else %}
-                <button>
-                    <a href="{% url "like_create" object.pk %}">Like</a>
-                </button>
+            {% if request.user.pk is author_user.pk %}
+                <a href="{% url 'delete_blog' object.pk %}" class="btn btn-primary">Delete Blog</a>
             {% endif %}
-        {% endif %}
+            {% if not request.user.is_anonymous %}
+                {% if like_instance.owner.pk is request.user.pk %}
+                    <a href="{% url "like_remove" object.pk %}" class="btn btn-primary">Remove Like</a>
+                {% else %}
+                    <a href="{% url "like_create" object.pk %}" class="btn btn-primary">Like</a>
+                {% endif %}
+            {% endif %}
+        </div>
         <p>Liked by {{ all_likes }} users</p>
     </div>
 {% endblock %}

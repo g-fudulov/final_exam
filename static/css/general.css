@@ -214,3 +214,67 @@ div.my.btn-section{
         gap: 10px;
         margin-top: 6px;
 }
+
+div.my.form.wrapper{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        color: #c2e7ff;
+}
+
+div.my.form.wrapper label{
+        display: block;
+}
+
+div.my.elements-form.wrapper{
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 12px;
+}
+
+div.my.elements-form.wrapper > ul{
+        color: crimson;
+}
+
+body > main > div > form > div:nth-child(2) > p:nth-child(5){
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+}
+
+#id_content{
+        background: #7575a3;
+        border-radius: 10px;
+        resize: none;
+        border: 0.5px solid beige;
+        padding: 10px;
+}
+
+#id_description{
+        background: #7575a3;
+        border-radius: 10px;
+        resize: none;
+        border: 0.5px solid beige;
+        padding: 10px;
+}
+
+div.my.wrapper.blog-details{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        background: #7575a3;
+        padding-top: 12px;
+        padding-bottom: 12px;
+}
+
+div.my.blog-details.btns{
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+}

@@ -131,7 +131,7 @@ class ProfileDetails(views.DetailView):
 class CreateAd(LoginRequiredMixin, views.CreateView):
     model = my_models.Ad
     template_name = 'ad/create.html'
-    fields = ["cover_photo", "additional_photo", "title", "description"]
+    fields = ["cover_photo", "additional_photo", "title", 'price',"description"]
 
     # success_url = reverse_lazy('homepage')
 
@@ -164,7 +164,7 @@ class DeleteAd(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
 class EditAd(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     model = my_models.Ad
     template_name = 'ad/edit.html'
-    fields = ['title', 'cover_photo', "additional_photo", 'description']
+    fields = ['title', 'cover_photo', "additional_photo", "price", 'description']
 
     def get_success_url(self):
         return reverse_lazy('details_ad', kwargs={'pk': self.object.pk})

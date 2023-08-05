@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% block page_content %}
-    <h1>Edit Advertisement</h1>
-    <form method="post" action="{% url 'edit_ad' object.pk %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="hidden" name="next" value="{{ next }}">
-        <button type="submit">Edit Advertisement</button>
-    </form>
+    <div class="my form wrapper">
+        <h1 style="color: ghostwhite;">Edit Advertisement</h1>
+        <form method="post" action="{% url 'edit_ad' object.pk %}">
+            {% csrf_token %}
+            <div class="my elements-form wrapper">
+                {{ form.as_p }}
+            </div>
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="my elements-form wrapper">
+                <button type="submit" class="btn btn-primary" style="margin-top: 12px">Edit Advertisement</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}
