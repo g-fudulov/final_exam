@@ -1,5 +1,6 @@
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
@@ -13,6 +14,12 @@ from .forms import CustomRegisterUserForm, CommentForm
 
 # Create your views here.
 UserModel = get_user_model()
+
+
+class ErrorMixin:
+    def handle_no_permission(self, message="No permission to modify this resource!"):
+        # Custom handling when test_func fails (user does not have permission)
+        return render(self.request, '404.html', {'exception_message': message}, status=404)
 
 
 class Homepage(views.ListView):
@@ -42,7 +49,7 @@ class RegisterUser(views.CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         # Create a Profile instance for the newly registered user
-        my_models.Profile.objects.create(user=self.object)  # TODO: does not create a profile!
+        my_models.Profile.objects.create(user=self.object)
         login(self.request, self.object)
         return response
 
@@ -52,7 +59,7 @@ class LogoutUser(auth_views.LogoutView):
     pass
 
 
-class EditUsername(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
+class EditUsername(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     model = UserModel
     template_name = 'user/edit_username.html'
     fields = ['username']
@@ -67,8 +74,11 @@ class EditUsername(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     def test_func(self):
         return self.request.user.pk == self.get_object().pk
 
+    def handle_no_permission(self):
+        return super().handle_no_permission(message="You do not have permission to edit this username!")
 
-class DeleteUser(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
+
+class DeleteUser(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
     """
         Deleting the MyUser instance will delete Profile and Ad instances.
     """
@@ -83,11 +93,14 @@ class DeleteUser(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
     def test_func(self):
         return self.request.user.pk == self.get_object().pk
 
+    def handle_no_permission(self):
+        return super().handle_no_permission(message="You do not have permission to delete this profile!")
+
 
 """Profile Views"""
 
 
-class EditProfile(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
+class EditProfile(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     template_name = "user/edit.html"
     model = my_models.Profile
     fields = ['first_name', 'last_name', 'phone_number']
@@ -102,6 +115,9 @@ class EditProfile(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     def test_func(self):
         requested_profile = self.get_object()
         return requested_profile.user_id == self.request.user.pk
+
+    def handle_no_permission(self):
+        return super().handle_no_permission(message="You do not have permission to edit this profile.")
 
 
 class ProfileDetails(views.DetailView):
@@ -131,7 +147,7 @@ class ProfileDetails(views.DetailView):
 class CreateAd(LoginRequiredMixin, views.CreateView):
     model = my_models.Ad
     template_name = 'ad/create.html'
-    fields = ["cover_photo", "additional_photo", "title", 'price',"description"]
+    fields = ["cover_photo", "additional_photo", "title", 'price', "description"]
 
     # success_url = reverse_lazy('homepage')
 
@@ -147,7 +163,7 @@ class CreateAd(LoginRequiredMixin, views.CreateView):
         return super().form_valid(form)
 
 
-class DeleteAd(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
+class DeleteAd(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
     model = my_models.Ad
     template_name = 'ad/delete.html'
     success_url = reverse_lazy('homepage')
@@ -160,8 +176,11 @@ class DeleteAd(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
         pk = self.kwargs['pk']
         return my_models.Ad.objects.filter(pk=pk).first()
 
+    def handle_no_permission(self):
+        return super().handle_no_permission(message="You do not have permission to delete this advertisement!")
 
-class EditAd(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
+
+class EditAd(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     model = my_models.Ad
     template_name = 'ad/edit.html'
     fields = ['title', 'cover_photo', "additional_photo", "price", 'description']
@@ -176,6 +195,9 @@ class EditAd(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     def test_func(self):
         requested_ad = self.get_object()
         return requested_ad.owner_id == self.request.user.profile.pk
+
+    def handle_no_permission(self):
+        return super().handle_no_permission(message="You do not have permission to edit this advertisement!")
 
 
 class DetailsAd(views.DetailView):
@@ -237,7 +259,7 @@ class DetailsBlog(views.DetailView):
         return context
 
 
-class DeleteBlog(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
+class DeleteBlog(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
     template_name = 'blog/delete.html'
     model = my_models.BlogPost
     success_url = reverse_lazy('show_blogs')
@@ -249,8 +271,11 @@ class DeleteBlog(LoginRequiredMixin, UserPassesTestMixin, views.DeleteView):
     def test_func(self):
         return self.request.user.pk == self.get_object().owner_id
 
+    def handle_no_permission(self):
+        return super().handle_no_permission(message="You do not have permission to delete this Blog!")
 
-class EditBlog(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
+
+class EditBlog(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     template_name = 'blog/edit.html'
     model = my_models.BlogPost
     fields = ['title', 'topic', 'content']
@@ -264,6 +289,9 @@ class EditBlog(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('details_blog', kwargs={"pk": self.get_object().pk})
+
+    def handle_no_permission(self):
+        return super().handle_no_permission(message="You do not have permission to edit this Blog!")
 
 
 """Like views"""
@@ -308,7 +336,7 @@ def create_comment(request, ad_pk):
     return redirect(request.META['HTTP_REFERER'] + f"#{ad_pk}", context=context)
 
 
-class EditComment(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
+class EditComment(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
     template_name = 'comment/edit.html'
     fields = ['content', ]
     model = my_models.Comment
@@ -323,6 +351,9 @@ class EditComment(LoginRequiredMixin, UserPassesTestMixin, views.UpdateView):
 
     def test_func(self):
         return self.get_object().owner_id == self.request.user.pk
+
+    def handle_no_permission(self):
+        return super().handle_no_permission(message="You do not have permission to edit this comment!")
 
 
 @login_required(login_url=reverse_lazy('login_user'))

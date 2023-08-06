@@ -278,3 +278,20 @@ div.my.blog-details.btns{
         align-items: center;
         justify-content: center;
 }
+
+div.my.fof.wrapper{
+        flex-direction: column;
+        height: 100vh;
+        justify-content: space-between;
+        width: 100vw;
+}
+
+div.my.fof-image.wrapper{
+        margin-left: auto;
+        margin-right: -71px;
+        margin-bottom: -52px;
+}
+
+div.my.fof-image.wrapper > img{
+        height: 100%;
+}
