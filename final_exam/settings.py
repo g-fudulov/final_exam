@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+adteb@(d3gu7myz!-b9m&xu+!omif3p_@6y%r_nu83)+asdzn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -88,8 +88,8 @@ WSGI_APPLICATION = 'final_exam.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "easy_drive_DB",
-        "USER": "postgres-user",
+        "NAME": "easy_drive_db",
+        "USER": "postgres",
         "PASSWORD": "password",
         "HOST": "127.0.0.1",
         "PORT": "5432",

@@ -17,7 +17,7 @@
                 <a href="{% url 'delete_blog' object.pk %}" class="btn btn-primary">Delete Blog</a>
             {% endif %}
             {% if not request.user.is_anonymous %}
-                {% if like_instance.owner.pk is request.user.pk %}
+                {% if like_instance.owner.user_id is request.user.pk %}
                     <a href="{% url "like_remove" object.pk %}" class="btn btn-primary">Remove Like</a>
                 {% else %}
                     <a href="{% url "like_create" object.pk %}" class="btn btn-primary">Like</a>

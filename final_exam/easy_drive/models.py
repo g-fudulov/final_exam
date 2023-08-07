@@ -27,7 +27,7 @@ class Ad(models.Model):
     cover_photo = models.URLField(max_length=205, blank=False, null=False)
     additional_photo = models.URLField(max_length=205, blank=False, null=False)
     title = models.CharField(max_length=30, blank=False, null=False)
-    description = models.TextField(max_length=200)
+    description = models.TextField(max_length=350)
     published = models.DateTimeField(auto_now_add=True)
     price = models.PositiveIntegerField(blank=False, null=False)
 

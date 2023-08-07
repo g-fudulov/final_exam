@@ -268,8 +268,7 @@ div.my.wrapper.blog-details{
         align-items: center;
         gap: 20px;
         background: #7575a3;
-        padding-top: 12px;
-        padding-bottom: 12px;
+        padding: 26px 38px;
 }
 
 div.my.blog-details.btns{

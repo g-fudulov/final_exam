@@ -23,7 +23,7 @@
             <a href="{% url 'login_user' %}" class="my link in-header">Login</a>
             <h5 class="my logged-p">Not Logged In</h5>
         {% else %}
-            <a href="{% url 'details_profile' request.user.pk %}" class="my link in-header">View profile</a>
+            <a href="{% url 'details_profile' request.user.profile.pk %}" class="my link in-header">View profile</a>
             <a href="{% url 'logout_user' %}" class="my link in-header">Logout</a>
             <h5 class="my logged-p">Logged in as: {{ request.user }}</h5>
         {% endif %}

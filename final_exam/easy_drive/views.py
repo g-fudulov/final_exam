@@ -110,7 +110,7 @@ class EditProfile(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.Upd
 
     def get_object(self, queryset=None):
         pk = self.kwargs['pk']
-        return my_models.Profile.objects.filter(pk=pk).first()
+        return get_object_or_404(my_models.Profile, pk=pk)
 
     def test_func(self):
         requested_profile = self.get_object()
@@ -170,7 +170,7 @@ class DeleteAd(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.Delete
 
     def test_func(self):
         requested_ad = self.get_object()
-        return requested_ad.owner_id == self.request.user.pk
+        return requested_ad.owner_id == self.request.user.profile.pk
 
     def get_object(self, queryset=None):
         pk = self.kwargs['pk']
@@ -212,7 +212,7 @@ class DetailsAd(views.DetailView):
         context = super().get_context_data(**kwargs)
         requested_ad = self.get_object()
         context['author_profile'] = my_models.Profile.objects.filter(pk=requested_ad.owner_id).first()
-        context['author_user'] = UserModel.objects.filter(pk=requested_ad.owner_id).first()
+        context['author_user'] = UserModel.objects.filter(pk=requested_ad.owner.user_id).first()
         context['comment_form'] = CommentForm
         return context
 
@@ -253,9 +253,11 @@ class DetailsBlog(views.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['author_profile'] = my_models.Profile.objects.filter(pk=self.get_object().owner_id).first()
-        context['author_user'] = UserModel.objects.filter(pk=self.get_object().owner_id).first()
+        # context['author_user'] = UserModel.objects.filter(pk=self.get_object().owner_id).first()
+        context['author_user'] = UserModel.objects.filter(pk=context['author_profile'].user_id).first()
         context['all_likes'] = my_models.Like.objects.filter(blog_id=self.get_object().pk).count()
-        context['like_instance'] = my_models.Like.objects.filter(blog_id=self.get_object().pk).first()
+        if self.request.user.is_authenticated:
+            context['like_instance'] = my_models.Like.objects.filter(blog_id=self.get_object().pk, owner_id=self.request.user.profile.pk).first()
         return context
 
 
@@ -269,7 +271,7 @@ class DeleteBlog(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.Dele
         return get_object_or_404(my_models.BlogPost, pk=pk)
 
     def test_func(self):
-        return self.request.user.pk == self.get_object().owner_id
+        return self.request.user.pk == self.get_object().owner.user_id
 
     def handle_no_permission(self):
         return super().handle_no_permission(message="You do not have permission to delete this Blog!")
@@ -285,7 +287,7 @@ class EditBlog(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.Update
         return get_object_or_404(my_models.BlogPost, pk=pk)
 
     def test_func(self):
-        return self.request.user.pk == self.get_object().owner_id
+        return self.request.user.pk == self.get_object().owner.user_id
 
     def get_success_url(self):
         return reverse_lazy('details_blog', kwargs={"pk": self.get_object().pk})
@@ -300,14 +302,18 @@ class EditBlog(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.Update
 @login_required(login_url=reverse_lazy('login_user'))
 def create_like(request, blog_pk):
     requested_blog = get_object_or_404(my_models.BlogPost, pk=blog_pk)
-    user_profile = get_object_or_404(my_models.Profile, pk=request.user.pk)
+    user_profile = get_object_or_404(my_models.Profile, pk=request.user.profile.pk)
     my_models.Like.objects.create(owner=user_profile, blog=requested_blog)
     return redirect('details_blog', pk=requested_blog.pk)
 
 
 @login_required(login_url=reverse_lazy('login_user'))
 def remove_like(request, blog_pk):
-    like_instance = my_models.Like.objects.filter(blog_id=blog_pk)
+    like_instance = my_models.Like.objects.filter(blog_id=blog_pk, owner_id=request.user.profile.pk).first()
+
+    if request.user.profile.pk != like_instance.owner_id:
+        raise Http404("You are not the author of this comment!")
+
     like_instance.delete()
     return redirect('details_blog', pk=blog_pk)
 
@@ -317,7 +323,7 @@ def remove_like(request, blog_pk):
 
 @login_required(login_url=reverse_lazy('login_user'))
 def create_comment(request, ad_pk):
-    user_profile = get_object_or_404(my_models.Profile, pk=request.user.pk)
+    user_profile = get_object_or_404(my_models.Profile, pk=request.user.profile.pk)
     requested_ad = get_object_or_404(my_models.Ad, pk=ad_pk)
 
     form = CommentForm()
@@ -350,7 +356,7 @@ class EditComment(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.Upd
         return get_object_or_404(my_models.Comment, pk=pk)
 
     def test_func(self):
-        return self.get_object().owner_id == self.request.user.pk
+        return self.get_object().owner_id == self.request.user.profile.pk
 
     def handle_no_permission(self):
         return super().handle_no_permission(message="You do not have permission to edit this comment!")
@@ -360,7 +366,7 @@ class EditComment(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.Upd
 def delete_comment(request, comment_pk):
     requested_comment = get_object_or_404(my_models.Comment, pk=comment_pk)
     # current_ad_pk = get_object_or_404(my_models.Ad, pk=requested_comment.ad.pk)
-    if request.user.pk != requested_comment.owner_id:
+    if request.user.profile.pk != requested_comment.owner_id:
         raise Http404("You are not the author of this comment!")
 
     requested_comment.delete()

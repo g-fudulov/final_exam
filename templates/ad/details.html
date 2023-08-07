@@ -16,7 +16,7 @@
         </div>
         <p>{{ object.description }}</p>
         <p>Published by: <a href="{% url 'details_profile' author_profile.pk %}" class="my link username">{{ author_user }}</a></p>
-        <p>Price: {{ object.price }}</p>
+        <p>Price: {{ object.price }} &euro;</p>
             {% if request.user.pk is author_user.pk %}
                 <a href="{% url 'edit_ad' object.pk %}" class="my details btn btn-primary">Edit Advertisement</a>
             {% else %}
