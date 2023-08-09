@@ -25,6 +25,7 @@
                 {% if object.user_id is request.user.pk %}
                     <a href="{% url 'edit_profile' object.pk %}" class="btn btn-primary">Edit Profile</a>
                     <a href="{% url 'edit_username' ad_owner_user.pk %}" class="btn btn-primary">Edit Username</a>
+                    <a href="{% url 'change_password' ad_owner_user.pk %}" class="btn btn-primary">Change Password</a>
                     <a href="{% url 'delete_user' ad_owner_user.pk %}" class="btn btn-primary">Delete Profile</a>
                 {% endif %}
             </div>

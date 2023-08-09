@@ -65,7 +65,7 @@ class EditUsername(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.Up
     fields = ['username']
 
     def get_success_url(self):
-        return reverse_lazy('details_profile', kwargs={'pk': self.get_object().pk})
+        return reverse_lazy('details_profile', kwargs={'pk': self.get_object().profile.pk})
 
     def get_object(self, queryset=None):
         pk = self.kwargs['pk']
@@ -95,6 +95,29 @@ class DeleteUser(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, views.Dele
 
     def handle_no_permission(self):
         return super().handle_no_permission(message="You do not have permission to delete this profile!")
+
+
+class ChangePassword(ErrorMixin, LoginRequiredMixin, UserPassesTestMixin, auth_views.PasswordChangeView):
+    template_name = 'user/change_password.html'
+    model = UserModel
+
+    def get_success_url(self):
+        return reverse_lazy('details_profile', kwargs={'pk': self.get_object().profile.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.get_object()
+        return context
+
+    def get_object(self):
+        pk = self.kwargs['user_pk']
+        return get_object_or_404(UserModel, pk=pk)
+
+    def test_func(self):
+        return self.request.user.pk == self.get_object().pk
+
+    def handle_no_permission(self):
+        return super().handle_no_permission(message="You do not have permission to change this password!")
 
 
 """Profile Views"""
@@ -257,7 +280,8 @@ class DetailsBlog(views.DetailView):
         context['author_user'] = UserModel.objects.filter(pk=context['author_profile'].user_id).first()
         context['all_likes'] = my_models.Like.objects.filter(blog_id=self.get_object().pk).count()
         if self.request.user.is_authenticated:
-            context['like_instance'] = my_models.Like.objects.filter(blog_id=self.get_object().pk, owner_id=self.request.user.profile.pk).first()
+            context['like_instance'] = my_models.Like.objects.filter(blog_id=self.get_object().pk,
+                                                                     owner_id=self.request.user.profile.pk).first()
         return context
 
 

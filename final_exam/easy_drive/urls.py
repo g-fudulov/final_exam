@@ -29,6 +29,7 @@ urlpatterns = [
         path('details/<int:pk>/', views.ProfileDetails.as_view(), name='details_profile'),
         path('edit/<int:pk>/', views.EditProfile.as_view(), name="edit_profile"),
         path("username/edit/<int:pk>/", views.EditUsername.as_view(), name='edit_username'),
+        path("password-change/<int:user_pk>/", views.ChangePassword.as_view(), name='change_password'),
         path("delete/<int:pk>/", views.DeleteUser.as_view(), name="delete_user")
     ])),
 
