@@ -336,7 +336,7 @@ def remove_like(request, blog_pk):
     like_instance = my_models.Like.objects.filter(blog_id=blog_pk, owner_id=request.user.profile.pk).first()
 
     if request.user.profile.pk != like_instance.owner_id:
-        raise Http404("You are not the author of this comment!")
+        raise Http404("You are not the owner of this like!")
 
     like_instance.delete()
     return redirect('details_blog', pk=blog_pk)
