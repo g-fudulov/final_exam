@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Comment
+from final_exam.easy_drive_reactions.models import Comment
 
 UserModel = get_user_model()
 
